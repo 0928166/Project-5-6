@@ -5,5 +5,5 @@ The documentation of the previous group that worked on this project can be found
 Code related items will be placed in 'Code'.
 All documentation will be placed in 'Documentation'
 
-Please don't push code to main before it has been review.
+Please don't push code to main before it has been reviewed.
 Documentation can be pushed without prior checks unless you are replacing a document entirely
