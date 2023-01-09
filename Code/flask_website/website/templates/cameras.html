@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% block title %}Cameras{% endblock %} {% block
+content %}
+<p>
+    <button class="btn btn-primary" type="button" 
+        data-bs-toggle="collapse" data-bs-target="#addIPcameraForms" 
+        aria-expanded="false" aria-controls="addIPcameraForms">
+    
+    </button>
+</p>
+<div class="collapse" id="addIPcameraForms">
+    <form method="POST">
+        <h3 align="center">IP Camera</h3>
+        <div class="form-group">
+          <label for="ipcam_name">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="ipcam_name"
+            name="ipcam_name"
+            placeholder="Enter name"
+          />
+        </div>
+      
+        <div class="form-group">
+          <label for="ipcam_ip">IP adress</label>
+          <input
+            type="text"
+            class="form-control"
+            id="ipcam_ip"
+            name="ipcam_ip"
+            placeholder="Enter IP adress"
+          />
+        </div>
+  </div>
+
+
+
+  {% endblock %}
+</form>

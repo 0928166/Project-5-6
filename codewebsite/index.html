@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html>
 <div class="wrapper">
+  <title>camera selection</title>
   <h1>ip address for </h1>
 
   <label>ip-address</label>
   <input id="ipadress" type="text"></input>
-  <label>port</label>
-  <input id="port" type="text"></input>
-  <button id="submitButton" type="submit">Print Name</button>
+  <!-- <label>port</label>
+  <input id="port" type="text"></input> -->
+  <button id="submitButton" type="submit">Show camera</button>
+  <button id="addCamera" type="submit">Add non ip camera</button>
   <p id='result'></p>
   <iframe id="video" scrolling="no" width="960" height="720" src="" hidden="hidden"></iframe>
-
+  <select id="videoSource"></select>
 </div>
 
 
@@ -66,14 +68,12 @@
     var port = document.getElementById('port').value;
     var result = document.getElementById('result');
     result.textContent = ipadress + ':' + port;
-
-
-
     //alert(nameField);
   }
   // test function to read camera IP and open the video in the iframe
-  function test() {
-    var ipadress = document.getElementById('ipadress').value;
+  function test_camera() {
+    var ipadress = navigator.mediaDevices.g
+    //var ipadress = document.getElementById('ipadress').value;
     let iframe = document.getElementById("video");
     let hidden = iframe.getAttribute("hidden");
     iframe.src = ipadress;
@@ -84,7 +84,46 @@
       iframe.setAttribute("hidden", "hidden");
     }
   }
-  submitButton.addEventListener('click', test, false);
+
+  function testDevices() {
+    navigator.mediaDevices.enumerateDevices().then(function (devices) {
+              for(var i = 0; i < devices.length; i ++){
+                  var device = devices[i];
+                  if (device.kind === 'videoinput') {
+                      var option = document.createElement('option');
+                      option.value = device.deviceId;
+                      option.text = device.label || 'camera ' + (i + 1);
+                      document.querySelector('select#videoSource').appendChild(option);
+                  }
+              };
+          });
+  }
+  // function getDevices() {
+  //   return navigator.mediaDevices.enumerateDevices();
+  // }
+
+  // function gotDevices(deviceInfos) {
+  //   window.deviceInfos = deviceInfos; // make available to console
+  //   console.log('Available input and output devices:', deviceInfos);
+  //   for (const deviceInfo of deviceInfos) {
+  //     const option = document.createElement('option');
+  //     option.value = deviceInfo.deviceId;
+  //     if (deviceInfo.kind === 'videoinput') {
+  //       option.text = deviceInfo.label || `Camera ${videoSelect.length + 1}`;
+  //       videoSelect.appendChild(option);
+  //     }
+  //   }
+  // }
+
+  // function testDevices() {
+  //   gotDevices(getDevices());
+  // }
+
+
+
+
+  addCamera.addEventListener('click', testDevices, false);
+  submitButton.addEventListener('click', test_camera, false);
 
 </script>
 
