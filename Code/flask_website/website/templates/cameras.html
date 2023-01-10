@@ -1,109 +1,169 @@
-{% extends "base.html" %} {% block title %}Cameras{% endblock %} 
+{% extends "base.html" %} {% block title %}Cameras{% endblock %}
 
 {% block style %}
 <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='cameras.css') }}">
 {% endblock %}
 {% block content %}
-<div class="header" id="myHeader">
+<div class="row justify-content-center">
+  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMenu"
+    aria-expanded="false" aria-controls="collapseMenu">
+    Menu
+  </button>
+</div>
+<div class="collapse" id="collapseMenu">
+  <div class="header" id="myHeader">
     <p>Click on the buttons to change the grid view.</p>
     <button class="btn" onclick="one()">1</button>
     <button class="btn active" onclick="two()">2</button>
     <button class="btn" onclick="four()">4</button>
   </div>
-<select
-  id="src_select_cam1"
-  class="form-select"
-  aria-label="Default select example"
-  onchange="setSource('cam1','src_select_cam1')"
-  style="width:25%"
->
-  <option selected>Select camera</option>
-  {% for camera in user.user_cameras %}
-  <option value="{{ camera.ip }}">{{ camera.name }}</option>
-  {% endfor %}
-</select>
+  <div class="row justify-content-center">
+    <select id="src_select_cam1" class="form-select" aria-label="Default select example"
+      onchange="setSource('cam1','src_select_cam1')" style="width:25%">
+      <option selected>Select camera 1</option>
+      {% for camera in user.user_cameras %}
+      <option value="{{ camera.ip }}">{{ camera.name }}</option>
+      {% endfor %}
+    </select>
 
-<select
-  id="src_select_cam2"
-  class="form-select"
-  aria-label="Default select example"
-  onchange="setSource('cam2','src_select_cam2')"
-  style="width:25%"
->
-  <option selected>Select camera</option>
-  {% for camera in user.user_cameras %}
-  <option value="{{ camera.ip }}">{{ camera.name }}</option>
-  {% endfor %}
-</select>
+    <select id="src_select_cam2" class="form-select" aria-label="Default select example"
+      onchange="setSource('cam2','src_select_cam2')" style="width:25%">
+      <option selected>Select camera 2 </option>
+      {% for camera in user.user_cameras %}
+      <option value="{{ camera.ip }}">{{ camera.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="row justify-content-center">
+    <select id="src_select_cam3" class="form-select" aria-label="Default select example"
+      onchange="setSource('cam3','src_select_cam3')" style="width:25%">
+      <option selected>Select camera 3 </option>
+      {% for camera in user.user_cameras %}
+      <option value="{{ camera.ip }}">{{ camera.name }}</option>
+      {% endfor %}
+    </select>
 
-<br>
+    <select id="src_select_cam4" class="form-select" aria-label="Default select example"
+      onchange="setSource('cam4','src_select_cam4')" style="width:25%">
+      <option selected>Select camera 4 </option>
+      {% for camera in user.user_cameras %}
+      <option value="{{ camera.ip }}">{{ camera.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>
 
 <div class="row">
-    <div class="column" >
-        <img id="cam1" src="" style="width:100%" />
-        <img id="cam2" src="" style="width:100%"/>
-        <img id="cam3" src="" class="img-fluid" style="width:100%"/>
-        <img id="cam4" src="" class="img-fluid" style="width:100%"/>
-    </div>
+  <div class="column">
+    <img id="cam1" src="/static/placeholder.jpg" style="width: 100%" />
+  </div>
+  <div class="column">
+    <img id="cam2" src="/static/placeholder.jpg" style="width: 100%" />
+  </div>
+  <div class="column">
+    <img id="cam3" src="/static/placeholder.jpg" style="width: 100%" />
+  </div>
+  <div class="column">
+    <img id="cam4" src="static/placeholder.jpg" style="width: 100%" />
+  </div>
 </div>
+<!-- <div class="row">
+  <div class="column">
+    <img id="cam3" src="/static/placeholder.jpg" style="width: 100%" />
+  </div>
+  <div class="column">
+    <img id="cam4" src="static/placeholder.jpg" style="width: 100%" />
+  </div>
+</div> -->
 
 
 <script>
-    function setSource(cam, id) {
-        var e = document.getElementById(id);
-        var img = document.getElementById(cam);
-      var value = e.value;
-      var text = e.options[e.selectedIndex].text;
-      if (value != "Select camera") {
-        img.src = value;
-      } else {
-        img.src = ""
-      }
-      
+  function setSource(cam, id) {
+    var e = document.getElementById(id);
+    var img = document.getElementById(cam);
+    var value = e.value;
+    var text = e.options[e.selectedIndex].text;
+    if (value != "Select camera") {
+      img.src = value;
+    } else {
+      img.src = ""
     }
-    // Get the elements with class="column"
-    var elements = document.getElementsByClassName("column");
-    
-    // Declare a loop variable
-    var i;
-    
-    // Full-width images
-    function one() {
-        console.log(elements.length)
-        for (i = 0; i < elements.length; i++) {
-        elements[i].style.msFlex = "100%";  // IE10
-        elements[i].style.flex = "100%";
-      }
-    }
-    
-    // Two images side by side
-    function two() {
-      for (i = 0; i < elements.length; i++) {
-        elements[i].style.msFlex = "50%";  // IE10
-        elements[i].style.flex = "50%";
+
+  }
+  
+  // Declare a loop variable
+  var i;
+
+  function hide(input) {
+    for (i = 0; i < input.length; i++) {
+      let things = document.getElementById(input[i]);
+      let hidden = things.getAttribute("hidden");
+
+      if (!hidden) {
+        things.setAttribute("hidden", "hidden");
       }
     }
-    
-    // Four images side by side
-    function four() {
-      for (i = 0; i < elements.length; i++) {
-        elements[i].style.msFlex = "25%";  // IE10
-        elements[i].style.flex = "25%";
+  }
+
+  function unhide(input) {
+    for (i = 0; i < input.length; i++) {
+      let things = document.getElementById(input[i]);
+      let hidden = things.getAttribute("hidden");
+
+      if (hidden) {
+        things.removeAttribute("hidden");
       }
     }
-    
-    // Add active class to the current button (highlight it)
-    var header = document.getElementById("myHeader");
-    var btns = header.getElementsByClassName("btn");
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].addEventListener("click", function() {
-        var current = document.getElementsByClassName("active");
-        current[0].className = current[0].className.replace(" active", "");
-        this.className += " active";
-      });
-    }
-    </script>
+  }
+  // Get the elements with class="column"
+  var elements = document.getElementsByClassName("column");
   
   
+  // Full-width images
+  function one() {
+    for (i = 0; i < elements.length; i++) {
+      elements[i].style.msFlex = "100%";  // IE10
+      elements[i].style.flex = "100%";
+    }
+    hide(["cam2", "cam3", "cam4", "src_select_cam2", "src_select_cam3", "src_select_cam4"]);
+  }
+
+
+
+  // Two images side by side
+  function two() {
+    for (i = 0; i < elements.length; i++) {
+      elements[i].style.msFlex = "50%";  // IE10
+      elements[i].style.flex = "50%";
+    }
+    hide(["cam3", "cam4", "src_select_cam3", "src_select_cam4"]);
+    unhide(["cam2", "src_select_cam2"]);
+
+  }
+
+  // Four images side by side
+  function four() {
+    for (i = 0; i < elements.length; i++) {
+      elements[i].style.msFlex = "25%";  // IE10
+      elements[i].style.flex = "25%";
+    }
+
+    unhide(["cam2", "cam3", "cam4", "src_select_cam2", "src_select_cam3", "src_select_cam4"]);
+  }
+
+  // Add active class to the current button (highlight it)
+  var header = document.getElementById("myHeader");
+  var btns = header.getElementsByClassName("btn");
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener("click", function () {
+      var current = document.getElementsByClassName("active");
+      current[0].className = current[0].className.replace(" active", "");
+      this.className += " active";
+    });
+  }
+  two()
+</script>
+
+
 {% endblock %}
