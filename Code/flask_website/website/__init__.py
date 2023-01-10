@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
+from os.path import dirname, abspath
 from flask_login import LoginManager
 
 db = SQLAlchemy()
@@ -16,11 +17,13 @@ def create_app():
     
     from .views import views
     from .auth import auth
+    from .camera import camera
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(camera, url_prefix='/')
     
-    from .models import User, Note
+    from .models import User, IpCamera
     create_database(app)
 
     login_manager = LoginManager()
@@ -30,11 +33,10 @@ def create_app():
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
-
     return app
 
 def create_database(app):
-    if not path.exists('C:/Users/nbalj/OneDrive - Hogeschool Rotterdam/TI2/project5-6/code/flask_website/instance/' + DB_NAME):
+    if not path.exists(dirname(dirname(abspath(__file__))) + '/instance/' + DB_NAME):
         with app.app_context():
             db.create_all()
         print('Created Database!')

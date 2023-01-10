@@ -1,0 +1,67 @@
+{% extends "base.html" %} {% block title %}Cameras{% endblock %} {% block style
+%}
+<link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}" />
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='add_cameras.css') }}"
+/>
+{% endblock %} {% block content %}
+
+<form method="POST">
+  <h3 align="center">IP Camera</h3>
+  <div class="form-group">
+    <label for="ipcam_name">Name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="ipcam_name"
+      name="ipcam_name"
+      placeholder="Enter name"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="ipcam_ip">IP adress</label>
+    <input
+      type="text"
+      class="form-control"
+      id="ipcam_ip"
+      name="ipcam_ip"
+      placeholder="Enter IP adress"
+    />
+    <br />
+  </div>
+  <div class="row justify-content-center">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+
+<table class="table" id="cameras">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Ip adress</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for camera in user.user_cameras %}
+    <tr>
+      <th scope="row">{{ camera.id }}</th>
+      <td>{{ camera.name }}</td>
+      <td>{{ camera.ip }}</td>
+      <td>
+        <button
+          type="button"
+          class="btn-close"
+          onclick="deleteCamera({{ camera.id }})"
+        ></button>
+      </td>
+    </tr>
+
+    <!-- <iframe id="video" scrolling="no" width="720" height="480" src="{{ camera.ip }}">{{ camera.name }}</iframe> -->
+    {% endfor %}
+  </tbody>
+
+  {% endblock %}
+</table>

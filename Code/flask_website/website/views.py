@@ -8,7 +8,3 @@ views = Blueprint('views', __name__)
 def home():
     return render_template("home.html", user=current_user)
 
-@views.route('/cameras')
-@login_required
-def cameras():
-    return render_template("cameras.html", user = current_user)
