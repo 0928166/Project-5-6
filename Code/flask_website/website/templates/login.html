@@ -1,4 +1,12 @@
 {% extends "base.html" %}  {% block title %}Log in{% endblock %}
+{% block style
+  %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}" />
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='login.css') }}"
+  />
+  {% endblock %}
 
 {% block content %}
 <form method="POST">
@@ -25,6 +33,8 @@
       />
     </div>
     <br />
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+    <div class="row justify-content-center">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    </form>
 {% endblock %}
