@@ -15,8 +15,8 @@
   <div class="header" id="myHeader">
     <p>Click on the buttons to change the grid view.</p>
     <button class="btn" onclick="one()">1</button>
-    <button class="btn active" onclick="two()">2</button>
-    <button class="btn" onclick="four()">4</button>
+    <button class="btn " onclick="two()">2</button>
+    <button class="btn active" onclick="four()">4</button>
   </div>
   <div class="row justify-content-center">
     <select id="src_select_cam1" class="form-select" aria-label="Default select example"
@@ -54,28 +54,31 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="column">
+<!-- <div class="row">
+  <div class="col">
     <img id="cam1" src="/static/placeholder.jpg" style="width: 100%" />
   </div>
-  <div class="column">
+  <div class="col">
     <img id="cam2" src="/static/placeholder.jpg" style="width: 100%" />
   </div>
-  <div class="column">
+  <div class="col">
     <img id="cam3" src="/static/placeholder.jpg" style="width: 100%" />
   </div>
-  <div class="column">
-    <img id="cam4" src="static/placeholder.jpg" style="width: 100%" />
-  </div>
-</div>
-<!-- <div class="row">
-  <div class="column">
-    <img id="cam3" src="/static/placeholder.jpg" style="width: 100%" />
-  </div>
-  <div class="column">
+  <div class="col">
     <img id="cam4" src="static/placeholder.jpg" style="width: 100%" />
   </div>
 </div> -->
+<div class="row">
+  <div class="col-md-9">
+    <img id="cam1" src="/static/placeholder.jpg" style="width: 100%" />
+  </div>
+  <div class="col-md-3">
+    <img id="cam2" src="/static/placeholder.jpg" style="width: 100%" />
+    <img id="cam3" src="/static/placeholder.jpg" style="width: 100%" />
+    <img id="cam4" src="static/placeholder.jpg" style="width: 100%" />
+  </div>
+</div>
+
 
 
 <script>
@@ -117,14 +120,14 @@
     }
   }
   // Get the elements with class="column"
-  var elements = document.getElementsByClassName("column");
+  var elements = document.getElementsByClassName("col");
   
   
   // Full-width images
   function one() {
     for (i = 0; i < elements.length; i++) {
-      elements[i].style.msFlex = "100%";  // IE10
-      elements[i].style.flex = "100%";
+      elements[i].style.msFlex = "90%";  // IE10
+      elements[i].style.flex = "90%";
     }
     hide(["cam2", "cam3", "cam4", "src_select_cam2", "src_select_cam3", "src_select_cam4"]);
   }
@@ -162,7 +165,8 @@
       this.className += " active";
     });
   }
-  two()
+  // two()
+  four()
 </script>
 
 
