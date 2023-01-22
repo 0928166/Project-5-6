@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Project 5/6 kotug{% endblock %}</title>
@@ -11,10 +10,11 @@
       integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
-    {% block style %}
-
-    {% endblock %}
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='base.css') }}"
+    />
+    {% block style %} {% endblock %}
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -48,7 +48,25 @@
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/cameras">Cameras</a></li>
                 <li>
-                  <a class="dropdown-item" href="/add-camera">Add/remove camera</a>
+                  <a class="dropdown-item" href="/add-camera">
+                    Add/remove camera
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Account
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="/acc-pass">Change Password</a>
                 </li>
               </ul>
             </li>
@@ -58,7 +76,6 @@
             <a class="nav-link" href="/logout">Logout</a>
             {% else %}
             <a class="nav-link" href="/login">Login</a>
-            <!-- <a class="nav-link" href="/sign-up">Sign up</a> -->
             {% endif %}
           </div>
         </div>
@@ -89,8 +106,7 @@
     {% endif %} {% endfor %} {% endif %} {% endwith %}
 
     <!-- <div class="container"></div> -->
-      {% block content %} 
-      {% endblock %}
+    {% block content %} {% endblock %}
 
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
