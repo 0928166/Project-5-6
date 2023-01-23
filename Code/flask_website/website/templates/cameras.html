@@ -54,21 +54,7 @@
   </div>
 </div>
 
-<!-- <div class="row">
-  <div class="col">
-    <img id="cam1" src="/static/placeholder.jpg" style="width: 100%" />
-  </div>
-  <div class="col">
-    <img id="cam2" src="/static/placeholder.jpg" style="width: 100%" />
-  </div>
-  <div class="col">
-    <img id="cam3" src="/static/placeholder.jpg" style="width: 100%" />
-  </div>
-  <div class="col">
-    <img id="cam4" src="static/placeholder.jpg" style="width: 100%" />
-  </div>
-</div> -->
-<div class="row">
+<div class="row justify-content-center">
   <div id="col1" class="col-md-9">
     <img id="cam1" src="/static/placeholder.jpg" style="width: 100%" />
   </div>
@@ -125,7 +111,7 @@
   
   // Full-width images
   function one() {
-    document.getElementById("col1").className = "col-md-12"
+    document.getElementById("col1").className = "col-md-10"
     hide(["cam2", "cam3", "cam4", "src_select_cam2", "src_select_cam3", "src_select_cam4"]);
   }
 
