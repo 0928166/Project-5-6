@@ -14,7 +14,7 @@ camera = Blueprint('camera', __name__)
 def cameras():
     return render_template("cameras.html", user = current_user)
 
-@camera.route('/addCamera', methods=['GET', 'POST'])
+@camera.route('/add-camera', methods=['GET', 'POST'])
 @login_required
 def addCamera():
     if request.method == "POST":

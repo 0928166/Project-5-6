@@ -13,5 +13,5 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
+    is_admin = db.Column(db.Boolean, default=False, nullable= False)
     user_cameras = db.relationship('IpCamera')
-

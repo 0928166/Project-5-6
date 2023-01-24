@@ -4,6 +4,7 @@ from os import path
 from os.path import dirname, abspath
 from flask_login import LoginManager
 
+from werkzeug.security import generate_password_hash
 db = SQLAlchemy()
 DB_NAME = "database.db"
 
@@ -18,10 +19,12 @@ def create_app():
     from .views import views
     from .auth import auth
     from .camera import camera
+    from .admin import admin
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(camera, url_prefix='/')
+    app.register_blueprint(admin, url_prefix='/')
     
     from .models import User, IpCamera
     create_database(app)
@@ -36,7 +39,11 @@ def create_app():
     return app
 
 def create_database(app):
+    from .models import User
     if not path.exists(dirname(dirname(abspath(__file__))) + '/instance/' + DB_NAME):
         with app.app_context():
             db.create_all()
+            admin = User(username="admin",first_name="admin", password=generate_password_hash("adminadmin", method='sha256'), is_admin=True)
+            db.session.add(admin)
+            db.session.commit()
         print('Created Database!')
