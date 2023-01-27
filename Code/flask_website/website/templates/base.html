@@ -17,6 +17,7 @@
     {% block style %} {% endblock %}
   </head>
   <body>
+    <!-- navbar from bootsrap -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Navbar</a>
@@ -33,6 +34,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbar">
           <div class="navbar-nav">
+            <!-- if the user is logged in , they can see all these pages -->
             {% if user.is_authenticated %}
             <a class="nav-link" aria-current="page" href="/">Home</a>
             <li class="nav-item dropdown">
@@ -70,10 +72,12 @@
                 </li>
               </ul>
             </li>
-            {% if user.username == 'admin'%}
+            <!-- if user is admin, show admin page. If not, don't -->
+            {% if user.is_admin == true %}
             <a class="nav-link" href="/admin-page">Admin</a>
             {% endif %}
             <a class="nav-link" href="/logout">Logout</a>
+            <!-- if the user is not logged in they can only see the login page -->
             {% else %}
             <a class="nav-link" href="/login">Login</a>
             {% endif %}
@@ -81,10 +85,10 @@
         </div>
       </div>
     </nav>
-
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %} {% for category, message in messages %} {% if category ==
-    'error' %}
+    <!-- processing of messages that get flashed by the python code -->
+    {% with messages = get_flashed_messages(with_categories=true) %} 
+    {% if messages %} {% for category, message in messages %} {% if category == 'error' %}
+    <!-- if messages are flagged as error, alert-danger is used -->
     <div class="alert alert-danger alter-dismissable fade show" role="alert">
       {{ message }}
       <button
@@ -95,6 +99,7 @@
       ></button>
     </div>
     {% else %}
+    <!-- if messages are flagged as good, alert-succes is used -->
     <div
       class="alert alert-success alter-dismissable fade show"
       role="alert"
@@ -108,6 +113,7 @@
     <!-- <div class="container"></div> -->
     {% block content %} {% endblock %}
 
+    <!-- scripts to get style elements/functionality -->
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -123,7 +129,7 @@
       integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
       crossorigin="anonymous"
     ></script>
-
+    <!-- allows website to load the javascript functions -->
     <script
       type="text/javascript"
       src="{{ url_for('static', filename='index.js')}}"

@@ -3,44 +3,50 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from os.path import dirname, abspath
 from flask_login import LoginManager
-
 from werkzeug.security import generate_password_hash
+
+# assign SQLAlchemy functionallity to db
 db = SQLAlchemy()
 DB_NAME = "database.db"
-
+# creates the app that will run the website
 def create_app():
+    # assigns and configures the Flask object. Also attaches the database to this object
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'asdfghjkl'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
 
-    
+    # import all the routes that the webpages use
     from .views import views
     from .auth import auth
     from .camera import camera
     from .admin import admin
-
+    # registers all the blueprints to the urls
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(camera, url_prefix='/')
     app.register_blueprint(admin, url_prefix='/')
-    
+    # import database models and creates the database, if it doesn't exist already
     from .models import User, IpCamera
     create_database(app)
-
+    # creates the loginmanager, this will handle the login system
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
+    # this allows the login manager to get the id of users
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
     return app
-
+# creates a database if one doesn't exist yet. It will also create an admin account
 def create_database(app):
+    # import models that will be used in the database
     from .models import User
+    # check if the database already exists
     if not path.exists(dirname(dirname(abspath(__file__))) + '/instance/' + DB_NAME):
+        # within context of this app, create database and make admin user with adminadmin as password, please change this after the first login
         with app.app_context():
             db.create_all()
             admin = User(username="admin",first_name="admin", password=generate_password_hash("adminadmin", method='sha256'), is_admin=True)

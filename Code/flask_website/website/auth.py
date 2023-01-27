@@ -5,15 +5,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 import json
 
+# create auth blueprint, this allows us to define functions before an actual object exists
 auth = Blueprint('auth', __name__)
 
+# this is the route to the login page
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    # if post request:
     if request.method == 'POST':
+        # get data from the forms
         username = request.form.get('username')
         password = request.form.get('password')
-
+        # find user in database
         user = User.query.filter_by(username=username).first()
+        # if the user exists, check the password hash, if these match, log in the user
+        # if not flash error and do not login the user
         if user: 
             if check_password_hash(user.password, password):
                 flash('Logged in succesfully.', category='success')
@@ -23,76 +29,43 @@ def login():
                 flash('Incorrect Password, try again.', category='error')
         else:
             flash('username does not exist.', category='error')
+    # if get request:
     return render_template("login.html", user=current_user)
 
+# this is the route to the logout page, it doesn't actually have any visuals.
+# it logs out the current user and returns them to the login page
 @auth.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
 
-# @auth.route('/admin-page', methods=['GET', 'POST'])
-# @login_required
-# def admin_page():
-#     if request.method == 'POST':
-#         username = request.form.get('username')
-#         first_name = request.form.get('firstName')
-#         password1 = request.form.get('password1')
-#         password2 = request.form.get('password2')
-
-#         user = User.query.filter_by(username=username).first()
-
-#         if user:
-#             flash('Username already in use', category='error')
-#         elif len(username) < 4: 
-#             flash('username invalid', category='error')
-#         elif len(first_name) < 2:
-#             flash('first name is invalid', category='error')
-#         elif password1 != password2:
-#             flash('Passwords don\'t match', category='error')
-#         elif len(password1) < 7:
-#             flash('Password must be 7 characters', category='error')
-#         else: 
-#             new_user = User(username=username, first_name=first_name, password=generate_password_hash(password1, method='sha256'))
-#             db.session.add(new_user)
-#             db.session.commit()
-            
-#             flash('Account created!', category='succes')
-#             return redirect(url_for('auth.admin_page'))
-#     users = User.query.all()
-#     return render_template("admin_page.html", user=current_user, users=users)   
-
-
-# @auth.route('/delete-user', methods=['POST'])
-# @login_required
-# def delete_user():
-#     data = json.loads(request.data)
-#     userId = data['userId']
-#     user = User.query.get(userId)
-#     if user:
-#         if user.id == userId:
-#             db.session.delete(user)
-#             db.session.commit()
-#             return jsonify({})
-
+# this is the route to the change password page
+# here users can change their passwords
 @auth.route('/acc-pass', methods=['GET', 'POST'])
 @login_required
 def change_passwd():
+    # if post request:
     if request.method == 'POST':
+        # get info from forms
         current_password = request.form.get('current_password')
         new_password1 = request.form.get('new_password1')
         new_password2 = request.form.get('new_password2')
 
+        # if the current password hash doesn't match the one filled in, flash error
         if not check_password_hash(current_user.password, current_password):
             flash('current password is incorrect', category='error')
+        # if the new passwords don't match, flash error
         elif new_password1 != new_password2:
             flash('Passwords don\'t match', category='error')
+        # if the password is too short, flash error
         elif len(new_password1) < 7:
             flash('Password must be 7 characters', category='error')
+        # if everything is correct, generate new password hash and commit the new password to the database
         else: 
             current_user.password = generate_password_hash(new_password1, method='sha256')
             db.session.commit()
-            
             flash('Succesfully changed password', category='succes')
             return redirect(url_for('views.home'))
+    # if get request, render the page
     return render_template("change_password.html", user=current_user)

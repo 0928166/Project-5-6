@@ -1,5 +1,6 @@
 {% extends "base.html" %} {% block title %}Add cameras{% endblock %} 
 {% block style %}
+<!-- link to the style sheets -->
 <link 
   rel="stylesheet" 
   href="{{ url_for('static', filename='base.css') }}" 
@@ -9,7 +10,7 @@
   href="{{ url_for('static', filename='add_cameras.css') }}"
 />
 {% endblock %} {% block content %}
-
+<!-- create form to enter ip camera info: name and ip adress to the stream -->
 <form method="POST">
   <h3 align="center">IP Camera</h3>
   <div class="form-group">
@@ -38,7 +39,7 @@
     <button type="submit" class="btn btn-primary">Submit</button>
   </div>
 </form>
-
+<!-- creates table with info of all the cameras linked to this account -->
 <table class="table" id="cameras">
   <thead>
     <tr>
@@ -48,12 +49,15 @@
     </tr>
   </thead>
   <tbody>
+    <!-- for every camera linked to the account, get the id, name and IP adress and show them in the table -->
     {% for camera in user.user_cameras %}
     <tr>
       <th scope="row">{{ camera.id }}</th>
       <td>{{ camera.name }}</td>
       <td>{{ camera.ip }}</td>
       <td>
+        <!-- add a button at the end of the table, this button allows the user to delete the camera from the database. -->
+        <!-- if you see errors, these can be ignored. This syntax is allowed by flask -->
         <button
           type="button"
           class="btn-close"
@@ -61,8 +65,6 @@
         ></button>
       </td>
     </tr>
-
-    <!-- <iframe id="video" scrolling="no" width="720" height="480" src="{{ camera.ip }}">{{ camera.name }}</iframe> -->
     {% endfor %}
   </tbody>
 </table>
