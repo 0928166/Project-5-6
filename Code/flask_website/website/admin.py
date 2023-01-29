@@ -22,32 +22,31 @@ def admin_page():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         # search the database for a user with the same username
-        user = User.query.filter_by(username=username).first()
+        user = db.session.query(User).filter_by(username=username).first()
         # if one is found, flash error msg
         if user:
             flash('Username already in use', category='error')
         # if username is too short, flash error
-        elif len(username) < 4: 
-            flash('username invalid', category='error')
+        elif len(username) < 4 or len(username) > 20: 
+            flash('username must be between 4-20 characters', category='error')
         # if the first name is too short, flash error
-        elif len(first_name) < 2:
-            flash('first name is invalid', category='error')
+        elif len(first_name) < 2 or len(first_name) > 20:
+            flash('first name must be at least 2 characters', category='error')
+        # if the password is not a min of 7 characters, flash error
+        elif len(password1) < 7 or len(password1) > 40:
+            flash('Password must be 7 characters', category='error')
         # if passwords aren't the same, flash error
         elif password1 != password2:
             flash('Passwords don\'t match', category='error')
-        # if the password is not a min of 7 characters, flash error
-        elif len(password1) < 7:
-            flash('Password must be 7 characters', category='error')
         # if everything is correct, create user and hash the password and commit the user to the database
         else: 
             new_user = User(username=username, first_name=first_name, password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
             flash('Account created!', category='succes')
-            return redirect(url_for('admin.admin_page'))
 
     # if it is just a get request. get all the users, render the adminpage
-    users = User.query.all()
+    users = db.session.query(User).all()
     return render_template("admin_page.html", user=current_user, users=users) 
 
   
@@ -57,11 +56,11 @@ def admin_page():
 def delete_user():
     # read the json made by the script, take the user id and search it in the database
     data = json.loads(request.data)
-    userId = data['userId']
-    user = User.query.get(userId)
+    user_id = data['userId']
+    user = db.session.query(User).get(user_id)
     # if the user is found, get the id and delte the user and commit the database
     if user:
-        if user.id == userId:
+        if user.id == user_id:
             db.session.delete(user)
             db.session.commit()
             return jsonify({})

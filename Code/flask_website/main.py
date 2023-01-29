@@ -1,5 +1,4 @@
 from website import create_app
-from website import create_app
 # create the app
 app = create_app()
 # run the app

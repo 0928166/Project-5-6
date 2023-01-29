@@ -1,7 +1,3 @@
-#list all devices
-#send list to browser
-#capture images from selected devices?
-#W
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 from .models import IpCamera
@@ -21,14 +17,16 @@ def cameras():
 # this route will be the page where you can add and remove cameras
 @camera.route('/add-camera', methods=['GET', 'POST'])
 @login_required
-def addCamera():
+def add_camera():
     if request.method == "POST":
         # get form info
         ipcam_name = request.form.get('ipcam_name')
         ipcam_ip = request.form.get('ipcam_ip')
         # if name is too short, flash error
-        if len(ipcam_name) < 1:
-            flash('Name must be at least 1 character', 'error')
+        if len(ipcam_name) < 1 or len(ipcam_name) > 20:
+            flash('Name must be 1-20 characters', category='error')
+        elif len(ipcam_ip) > 400:
+            flash('ip is too long', category='error')
         # else create new camera that is linked to the currentuser and add it to the database
         else: 
             ip_cam = IpCamera(name=ipcam_name,ip=ipcam_ip, user_id=current_user.id)
@@ -44,8 +42,8 @@ def addCamera():
 def delete_camera():
     # get data from the json, search it in the database
     data = json.loads(request.data)
-    cameraId = data['cameraId']
-    camera = IpCamera.query.get(cameraId)
+    camera_id = data['cameraId']
+    camera = db.session.query(IpCamera).get(camera_id)
     # if the camera is found, chech if the camera is linked to the current user, if so delete it
     if camera:
         if camera.user_id == current_user.id:

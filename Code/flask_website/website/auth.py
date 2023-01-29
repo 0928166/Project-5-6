@@ -17,13 +17,13 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
         # find user in database
-        user = User.query.filter_by(username=username).first()
+        user = db.session.query(User).filter_by(username=username).first()
         # if the user exists, check the password hash, if these match, log in the user
         # if not flash error and do not login the user
         if user: 
             if check_password_hash(user.password, password):
-                flash('Logged in succesfully.', category='success')
                 login_user(user, remember=True)
+                flash('Logged in succesfully.', category='success')
                 return redirect(url_for('views.home'))
             else: 
                 flash('Incorrect Password, try again.', category='error')
@@ -59,8 +59,8 @@ def change_passwd():
         elif new_password1 != new_password2:
             flash('Passwords don\'t match', category='error')
         # if the password is too short, flash error
-        elif len(new_password1) < 7:
-            flash('Password must be 7 characters', category='error')
+        elif len(new_password1) < 7 or len(new_password1) > 40:
+            flash('Password must be 7-40 characters', category='error')
         # if everything is correct, generate new password hash and commit the new password to the database
         else: 
             current_user.password = generate_password_hash(new_password1, method='sha256')
