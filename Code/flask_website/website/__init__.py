@@ -7,14 +7,11 @@ from werkzeug.security import generate_password_hash
 
 # assign SQLAlchemy functionallity to db
 db = SQLAlchemy()
-DB_NAME = "database.db"
 # creates the app that will run the website
 def create_app():
     # assigns and configures the Flask object. Also attaches the database to this object
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'asdfghjkl'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config.from_pyfile(path.join('config', 'app.conf'))
     db.init_app(app)
 
     # import all the routes that the webpages use
@@ -43,7 +40,7 @@ def create_app():
 # creates a database if one doesn't exist yet. It will also create an admin account
 def create_database(app):
     # check if the database already exists
-    if not path.exists(dirname(dirname(abspath(__file__))) + '/instance/' + DB_NAME):
+    if not path.exists(path.join(dirname(dirname(abspath(__file__))),'instance', app.config.get("DB_NAME"))):
         # within context of this app, create database and make admin user with adminadmin as password, please change this after the first login
         with app.app_context():
             # import models that will be used in the database
